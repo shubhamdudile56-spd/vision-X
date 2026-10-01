@@ -358,6 +358,7 @@ export default function App() {
 
   const videoRef = useRef(null);
   const streamRef = useRef(null);
+  const userImageRef = useRef(null); // Persists user-uploaded image across async closures
 
   // Management State
   const [tickets, setTickets] = useState(() => {
@@ -636,16 +637,18 @@ export default function App() {
           setIsAnalyzing(false);
 
           const mockResult = sampleData || MULTI_MODAL_SAMPLES[Math.floor(Math.random() * MULTI_MODAL_SAMPLES.length)];
+          // Use the ref first (immune to stale closures), then fallback to targetImage, then mock
+          const preservedImage = userImageRef.current || targetImage || mockResult.image;
           const result = {
             ...mockResult,
-            image: targetImage || mockResult.image,
+            image: preservedImage,
             building: building || mockResult.building,
             room: roomId || mockResult.room,
             floor: floor || mockResult.floor,
             id: sampleData ? mockResult.id : ('scan-' + Date.now())
           };
           setActiveInspection(result);
-          setCurrentImage(result.image);
+          setCurrentImage(preservedImage); // Always restore the user's image
           setBuilding(result.building);
           setRoomId(result.room);
           setFloor(result.floor);
@@ -696,6 +699,7 @@ export default function App() {
       const reader = new FileReader();
       reader.onload = (uploadEvent) => {
         const dataUrl = uploadEvent.target.result;
+        userImageRef.current = dataUrl; // Save to ref immediately — immune to stale closures
         setCurrentImage(dataUrl);
         setMediaType('image');
         setCameraActive(false);
