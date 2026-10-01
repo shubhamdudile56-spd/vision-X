@@ -172,7 +172,7 @@ const getSeverityBadgeClass = (severity) => {
       return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/40';
     case 'LOW':
     default:
-      return 'bg-blue-/20 text-blue-400 order-blue-/40';
+      return 'bg-cyan-500/20 text-cyan-400 border-cyan-500/40';
   }
 };
 
@@ -580,7 +580,11 @@ export default function App() {
 
   const handleStatusChange = (ticketId, newStatus) => {
     setTickets((prev) =>
-      prev.map((t) => (t.id === ticketId ? { ...t, status: newStatus } : t))
+      prev.map((t) => (t.id === ticketId ? {
+        ...t,
+        status: newStatus,
+        resolvedAt: newStatus === 'RESOLVED' ? (t.resolvedAt || new Date().toISOString()) : t.resolvedAt
+      } : t))
     );
     showToast(`Ticket ${ticketId} updated to ${newStatus.replace('_', ' ')}.`, 'cyan');
   };
@@ -607,17 +611,17 @@ export default function App() {
   });
 
   return (
-    <div className="min-h-screen bg-[#070a11] text-slate-100 font-sans selection:bg-blue-/30 selection:text-blue-400 elative overflow-x-hidden">
+    <div className="min-h-screen bg-[#070a11] text-slate-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-400 relative overflow-x-hidden">
       
       {/* Background Ambient Glows */}
-      <div className="fixed -top-40 -left-40 w-96 h-96 bg-blue-/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="fixed -top-40 -left-40 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="fixed top-1/3 -right-40 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Floating Notification Toast */}
       {toastMessage && (
         <div className="fixed top-16 right-6 z-50 animate-bounce">
-          <div className="px-4 py-2.5 rounded-xl border border-blue-/40 bg-slate-950/90 text-blue-400 ext-xs shadow-2xl backdrop-blur-md flex items-center space-x-2">
-            <Sparkles className="w-4 h-4 text-blue-" />
+          <div className="px-4 py-2.5 rounded-xl border border-cyan-500/40 bg-slate-950/90 text-cyan-400 text-xs shadow-2xl backdrop-blur-md flex items-center space-x-2">
+            <Sparkles className="w-4 h-4 text-cyan-400" />
             <span>{toastMessage.msg}</span>
           </div>
         </div>
@@ -714,12 +718,12 @@ export default function App() {
         <ContainerScroll
           titleComponent={
             <>
-              <p className="text-xs font-bold uppercase tracking-[0.3em] text-blue-400 b-4">
+              <p className="text-xs font-bold uppercase tracking-[0.3em] text-cyan-400 mb-4">
                 VisionX Autonomous Visual Intelligence
               </p>
               <h1 className="text-4xl sm:text-5xl md:text-[4.5rem] font-black tracking-tight text-white leading-[1.05]">
                 See. Detect.
-                <span className="block mt-2 bg-gradient-to-r from-blue-400 ia-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                <span className="block mt-2 bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
                   Take Action.
                 </span>
               </h1>
@@ -730,7 +734,7 @@ export default function App() {
               <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                 <button
                   onClick={() => document.getElementById('main-tabs')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-400 o-blue-600 hover:from-blue-400 over:to-blue-500 text-slate-950 font-bold text-sm shadow-lg transition-all"
+                  className="px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-bold text-sm shadow-lg transition-all"
                 >
                   Launch Inspector ↓
                 </button>
@@ -742,10 +746,10 @@ export default function App() {
           {/* Inspection canvas preview inside the 3-D card */}
           <div className="relative w-full h-full bg-[#070a11] rounded-2xl overflow-hidden">
             {/* Reticle corners */}
-            <div className="absolute top-4 left-4 w-7 h-7 border-t-2 border-l-2 border-blue-/70 z-10" />
-            <div className="absolute top-4 right-4 w-7 h-7 border-t-2 border-r-2 border-blue-/70 z-10" />
-            <div className="absolute bottom-4 left-4 w-7 h-7 border-b-2 border-l-2 border-blue-/70 z-10" />
-            <div className="absolute bottom-4 right-4 w-7 h-7 border-b-2 border-r-2 border-blue-/70 z-10" />
+            <div className="absolute top-4 left-4 w-7 h-7 border-t-2 border-l-2 border-cyan-400/70 z-10" />
+            <div className="absolute top-4 right-4 w-7 h-7 border-t-2 border-r-2 border-cyan-400/70 z-10" />
+            <div className="absolute bottom-4 left-4 w-7 h-7 border-b-2 border-l-2 border-cyan-400/70 z-10" />
+            <div className="absolute bottom-4 right-4 w-7 h-7 border-b-2 border-r-2 border-cyan-400/70 z-10" />
 
             {/* Background inspection photo */}
             <img
@@ -779,8 +783,8 @@ export default function App() {
 
             {/* Top HUD */}
             <div className="absolute top-0 left-0 right-0 flex items-start justify-between px-5 pt-4 pointer-events-none">
-              <div className="flex items-center gap-2 bg-slate-950/80 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-slate-800 text-[11px] font-mono text-blue-">
-                <span className="w-2 h-2 rounded-full bg-blue-400" />
+              <div className="flex items-center gap-2 bg-slate-950/80 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-slate-800 text-[11px] font-mono text-cyan-400">
+                <span className="w-2 h-2 rounded-full bg-cyan-400" />
                 AI STREAM ACTIVE · HOSTEL B / ROOM 204
               </div>
               <div className="text-[10px] font-mono text-slate-500 bg-slate-950/60 px-2 py-1 rounded border border-slate-800">
@@ -791,7 +795,7 @@ export default function App() {
             {/* Bottom status bar */}
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#070a11] via-[#070a11]/80 to-transparent px-5 pb-5 pt-12">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <span className="flex items-center gap-1.5 text-[11px] font-mono text-blue-">
+                <span className="flex items-center gap-1.5 text-[11px] font-mono text-cyan-400">
                   <span className="w-2 h-2 rounded-full bg-emerald-400" />
                   GEMINI MULTIMODAL ACTIVE · gemini-3.6-flash
                 </span>
@@ -799,7 +803,7 @@ export default function App() {
                   <span className="text-slate-500">ISSUES <span className="text-amber-400 font-bold">3</span></span>
                   <span className="text-slate-500">SEVERITY <span className="text-rose-400 font-bold">0.71</span></span>
                   <span className="text-slate-500">CONF <span className="text-emerald-400 font-bold">94.2%</span></span>
-                  <span className="text-slate-500">TICKETS <span className="text-blue-400 ont-bold">3 OPEN</span></span>
+                  <span className="text-slate-500">TICKETS <span className="text-cyan-400 font-bold">3 OPEN</span></span>
                 </div>
               </div>
             </div>
@@ -817,7 +821,7 @@ export default function App() {
             {/* Top Bar Location & Controls */}
             <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-md flex flex-wrap items-center justify-between gap-4">
               <div className="flex flex-wrap items-center gap-4">
-                <div className="flex items-center space-x-2 text-blue-400 ont-semibold text-sm">
+                <div className="flex items-center space-x-2 text-cyan-400 font-semibold text-sm">
                   <MapPin className="w-4 h-4" />
                   <span>Target Inspection Location:</span>
                 </div>
@@ -828,7 +832,7 @@ export default function App() {
                   <select
                     value={building}
                     onChange={(e) => setBuilding(e.target.value)}
-                    className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-"
+                    className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-400"
                   >
                     <option value="Hostel A">Hostel A</option>
                     <option value="Hostel B">Hostel B</option>
@@ -843,7 +847,7 @@ export default function App() {
                   <select
                     value={floor}
                     onChange={(e) => setFloor(e.target.value)}
-                    className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-"
+                    className="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-400"
                   >
                     <option value="G">Ground</option>
                     <option value="1">1st Floor</option>
@@ -859,7 +863,7 @@ export default function App() {
                     type="text"
                     value={roomId}
                     onChange={(e) => setRoomId(e.target.value)}
-                    className="w-20 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-400 ont-mono"
+                    className="w-20 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-cyan-400 font-mono"
                     placeholder="e.g. 204"
                   />
                 </div>
@@ -878,7 +882,7 @@ export default function App() {
                       setCameraActive(false);
                       handleAnalyzeImage(sample);
                     }}
-                    className="px-3 py-1.5 rounded-lg text-xs bg-slate-950 border border-slate-800 hover:border-blue-/50 hover:bg-blue-/10 text-slate-300 transition-all whitespace-nowrap"
+                    className="px-3 py-1.5 rounded-lg text-xs bg-slate-950 border border-slate-800 hover:border-cyan-500/50 hover:bg-cyan-500/10 text-slate-300 transition-all whitespace-nowrap"
                   >
                     Sample #{idx + 1}
                   </button>
@@ -897,8 +901,8 @@ export default function App() {
                   <div className="absolute inset-0 pointer-events-none z-20 p-6 flex flex-col justify-between">
                     <div className="flex justify-between items-start">
                       <div className="space-y-1">
-                        <div className="flex items-center space-x-2 bg-slate-950/80 backdrop-blur-md px-3 py-1 rounded-md border border-slate-800 text-[11px] font-mono text-blue-">
-                          <span className="w-2 h-2 rounded-full bg-blue-400" />
+                        <div className="flex items-center space-x-2 bg-slate-950/80 backdrop-blur-md px-3 py-1 rounded-md border border-slate-800 text-[11px] font-mono text-cyan-400">
+                          <span className="w-2 h-2 rounded-full bg-cyan-400" />
                           <span>{cameraActive ? 'WEBCAM ACTIVE' : 'AI STREAM ACTIVE'}</span>
                         </div>
                         <p className="text-[10px] text-slate-400 font-mono">RES: 1080p | FPS: {fps}</p>
@@ -920,15 +924,15 @@ export default function App() {
                     </div>
 
                     {/* Reticle Frame Corner Marks */}
-                    <div className="absolute top-8 left-8 w-8 h-8 border-t-2 border-l-2 border-blue-/60 pointer-events-none" />
-                    <div className="absolute top-8 right-8 w-8 h-8 border-t-2 border-r-2 border-blue-/60 pointer-events-none" />
-                    <div className="absolute bottom-8 left-8 w-8 h-8 border-b-2 border-l-2 border-blue-/60 pointer-events-none" />
-                    <div className="absolute bottom-8 right-8 w-8 h-8 border-b-2 border-r-2 border-blue-/60 pointer-events-none" />
+                    <div className="absolute top-8 left-8 w-8 h-8 border-t-2 border-l-2 border-cyan-400/60 pointer-events-none" />
+                    <div className="absolute top-8 right-8 w-8 h-8 border-t-2 border-r-2 border-cyan-400/60 pointer-events-none" />
+                    <div className="absolute bottom-8 left-8 w-8 h-8 border-b-2 border-l-2 border-cyan-400/60 pointer-events-none" />
+                    <div className="absolute bottom-8 right-8 w-8 h-8 border-b-2 border-r-2 border-cyan-400/60 pointer-events-none" />
 
                     {/* Scanning Animation line */}
                     {isAnalyzing && (
                       <div 
-                        className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-blue-400 o-transparent shadow-[0_0_20px_#06b6d4] z-30 transition-all duration-75"
+                        className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent shadow-[0_0_20px_#06b6d4] z-30 transition-all duration-75"
                         style={{ top: `${scanProgress}%` }}
                       />
                     )}
@@ -1008,11 +1012,11 @@ export default function App() {
                     {isAnalyzing && (
                       <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm flex flex-col items-center justify-center space-y-4 z-40">
                         <div className="relative flex items-center justify-center">
-                          <div className="w-16 h-16 rounded-full border-2 border-blue-/20 border-t-blue-400 nimate-spin" />
-                          <Sparkles className="w-6 h-6 text-blue-400 bsolute " />
+                          <div className="w-16 h-16 rounded-full border-2 border-cyan-500/20 border-t-cyan-400 animate-spin" />
+                          <Sparkles className="w-6 h-6 text-cyan-400 absolute" />
                         </div>
                         <div className="text-center space-y-1">
-                          <p className="text-sm font-semibold text-blue-">
+                          <p className="text-sm font-semibold text-cyan-400">
                             {demoMode ? 'Simulating Visual Perception…' : 'Running Gemini Vision AI Model…'}
                           </p>
                           <p className="text-xs text-slate-400 font-mono">{scanProgress}% - Extracting Defect Patterns</p>
@@ -1027,7 +1031,7 @@ export default function App() {
                 <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800">
                   <div className="flex items-center space-x-3">
                     <label className="flex items-center space-x-2 px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold cursor-pointer transition-colors">
-                      <Upload className="w-4 h-4 text-blue-" />
+                      <Upload className="w-4 h-4 text-cyan-400" />
                       <span>Upload Custom Photo</span>
                       <input type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
                     </label>
@@ -1035,7 +1039,7 @@ export default function App() {
                     <button
                       onClick={() => handleAnalyzeImage()}
                       disabled={isAnalyzing}
-                      className="flex items-center space-x-2 px-5 py-2 rounded-lg bg-gradient-to-r from-blue-400 o-blue-600 hover:from-blue-400 over:to-blue-500 text-slate-950 font-bold text-xs shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all disabled:opacity-50"
+                      className="flex items-center space-x-2 px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 font-bold text-xs shadow-[0_0_15px_rgba(6,182,212,0.3)] transition-all disabled:opacity-50"
                     >
                       <Sparkles className="w-4 h-4" />
                       <span>{cameraActive ? 'Capture & Analyze Frame' : 'Run AI Detection'}</span>
@@ -1079,7 +1083,7 @@ export default function App() {
                         onClick={() => setSelectedIssueId(issue.id)}
                         className={`p-3.5 rounded-xl border transition-all cursor-pointer space-y-2 ${
                           selectedIssueId === issue.id
-                            ? 'bg-blue-/10 border-blue-/50 shadow-md'
+                            ? 'bg-cyan-500/10 border-cyan-500/50 shadow-md'
                             : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
                         }`}
                       >
@@ -1097,7 +1101,7 @@ export default function App() {
                         
                         <div className="flex justify-between items-center text-[10px] text-slate-500 font-mono pt-1">
                           <span>Category: {issue.category}</span>
-                          <span className="text-blue-400 ont-sans flex items-center space-x-1">
+                          <span className="text-cyan-400 font-sans flex items-center space-x-1">
                             <span>Locate on canvas</span>
                             <ChevronRight className="w-3 h-3" />
                           </span>
@@ -1114,11 +1118,11 @@ export default function App() {
                     </div>
 
                     <button
-                      onClick={() => setActiveTab('dashboard')}
+                      onClick={() => setActiveTab('tickets')}
                       className="w-full py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 flex items-center justify-center space-x-2 transition-colors"
                     >
-                      <span>View in Operations Dashboard</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-blue-" />
+                      <span>View in Ticket Desk & Analyzed Issues</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-cyan-400" />
                     </button>
                   </div>
 
@@ -1130,9 +1134,83 @@ export default function App() {
           </div>
         )}
 
-        {/* TAB 2: ADMIN DASHBOARD */}
-        {activeTab === 'dashboard' && (
+        {/* TAB 2: TICKET DESK & ANALYZED ISSUES */}
+        {(activeTab === 'tickets' || activeTab === 'dashboard') && (
           <div className="space-y-6">
+
+            {/* Top Analyzed Issues Section */}
+            <div className="p-6 rounded-2xl bg-slate-900/70 border border-slate-800/80 backdrop-blur-md space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <Sparkles className="w-5 h-5 text-cyan-400" />
+                    <h2 className="text-base font-bold text-slate-100">Visual AI Analyzed Issues</h2>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 font-mono">
+                      {activeInspection?.issues?.length || 0} DETECTED
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Defects and structural anomalies detected for <span className="text-cyan-300 font-semibold">{activeInspection?.building || building} - Room {activeInspection?.room || roomId}</span>
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setActiveTab('hub')}
+                    className="px-3.5 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-semibold flex items-center space-x-1.5 transition-colors"
+                  >
+                    <Camera className="w-3.5 h-3.5" />
+                    <span>Open in Inspector Canvas</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Analyzed Issues Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {activeInspection?.issues && activeInspection.issues.length > 0 ? (
+                  activeInspection.issues.map((issue) => (
+                    <div
+                      key={issue.id}
+                      className="p-4 rounded-xl bg-slate-950/70 border border-slate-800/90 hover:border-slate-700 space-y-3 transition-all flex flex-col justify-between"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-xl">{issue.categoryIcon}</span>
+                            <span className="text-xs font-bold text-slate-200">{issue.title}</span>
+                          </div>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border ${getSeverityBadgeClass(issue.severity)}`}>
+                            {issue.severity}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-400 leading-relaxed">{issue.description}</p>
+                      </div>
+
+                      <div className="pt-2 border-t border-slate-800/60 flex items-center justify-between text-[11px]">
+                        <span className="text-slate-500 font-mono">
+                          BBox: {issue.box?.x || 0}%, {issue.box?.y || 0}%
+                        </span>
+                        <button
+                          onClick={() => {
+                            setSelectedIssueId(issue.id);
+                            setActiveTab('hub');
+                            showToast(`Focused on ${issue.title} in Inspector Canvas`, 'cyan');
+                          }}
+                          className="text-cyan-400 hover:text-cyan-300 font-semibold flex items-center space-x-1 text-xs"
+                        >
+                          <span>Inspect on Canvas</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="col-span-full p-6 text-center text-slate-500 bg-slate-950/40 rounded-xl border border-slate-800/50">
+                    No active anomalies detected in current frame. Run an inspection in the Inspector Hub to analyze defects.
+                  </div>
+                )}
+              </div>
+            </div>
 
             {/* Glassmorphism Metric Cards Grid */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -1140,11 +1218,11 @@ export default function App() {
               <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-md space-y-2 relative overflow-hidden group">
                 <div className="flex justify-between items-center text-slate-400 text-xs">
                   <span>Total Scans</span>
-                  <Activity className="w-4 h-4 text-blue-" />
+                  <Activity className="w-4 h-4 text-cyan-400" />
                 </div>
                 <div className="text-2xl font-bold text-slate-100 font-mono">{metrics.totalScans}</div>
                 <div className="text-[10px] text-emerald-400">+12% from last week</div>
-                <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-blue-/10 rounded-full blur-md group-hover:bg-blue-/20 transition-all" />
+                <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-cyan-500/10 rounded-full blur-md group-hover:bg-cyan-500/20 transition-all" />
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 backdrop-blur-md space-y-2 relative overflow-hidden group">
@@ -1197,7 +1275,7 @@ export default function App() {
                     placeholder="Search by ticket #, title, or room..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-"
+                    className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-400"
                   />
                 </div>
               </div>
@@ -1212,7 +1290,7 @@ export default function App() {
                       onClick={() => setPriorityFilter(p)}
                       className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
                         priorityFilter === p
-                          ? 'bg-blue-400 ext-slate-950 shadow-sm'
+                          ? 'bg-cyan-400 text-slate-950 shadow-sm'
                           : 'text-slate-400 hover:text-slate-200'
                       }`}
                     >
@@ -1230,7 +1308,7 @@ export default function App() {
                       onClick={() => setStatusFilter(s)}
                       className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
                         statusFilter === s
-                          ? 'bg-blue-400 ext-slate-950 shadow-sm'
+                          ? 'bg-cyan-400 text-slate-950 shadow-sm'
                           : 'text-slate-400 hover:text-slate-200'
                       }`}
                     >
@@ -1261,7 +1339,7 @@ export default function App() {
                     {filteredTickets.length > 0 ? (
                       filteredTickets.map((ticket) => (
                         <tr key={ticket.id} className="hover:bg-slate-800/30 transition-colors">
-                          <td className="p-4 font-mono font-bold text-blue-">{ticket.id}</td>
+                          <td className="p-4 font-mono font-bold text-cyan-400">{ticket.id}</td>
                           <td className="p-4">
                             <div className="font-semibold text-slate-200">{ticket.building}</div>
                             <div className="text-[10px] text-slate-400">Room {ticket.room}</div>
@@ -1298,9 +1376,10 @@ export default function App() {
                               {ticket.status !== 'RESOLVED' && (
                                 <button
                                   onClick={() => handleStatusChange(ticket.id, 'RESOLVED')}
-                                  className="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-semibold transition-colors"
+                                  className="px-2.5 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-semibold transition-colors flex items-center space-x-1"
                                 >
-                                  Resolve
+                                  <Check className="w-3 h-3" />
+                                  <span>Resolve</span>
                                 </button>
                               )}
                             </div>
@@ -1322,68 +1401,169 @@ export default function App() {
           </div>
         )}
 
-        {/* TAB 3: HISTORY */}
+        {/* TAB 3: HISTORY & COMPLETED WORKS */}
         {activeTab === 'history' && (
-          <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="text-lg font-bold text-slate-200">Local Inspection Logs</h2>
-                <p className="text-xs text-slate-400">Cached past visual scans</p>
-              </div>
+          <div className="space-y-8">
 
-              <button
-                onClick={() => {
-                  setHistory([]);
-                  localStorage.removeItem('visionx_history');
-                  showToast('Local scan history cleared.', 'cyan');
-                }}
-                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs transition-colors"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                <span>Clear Logs</span>
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {history.map((item) => (
-                <div key={item.id} className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3 hover:border-slate-700 transition-all">
-                  <div className="relative h-44 rounded-xl overflow-hidden bg-black">
-                    <img src={item.image} alt="Log Thumbnail" className="w-full h-full object-cover" />
-                    <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-slate-950/80 backdrop-blur-md border border-slate-800 text-[10px] font-mono text-blue-">
-                      {item.building} - {item.room}
+            {/* Section 1: Latest Completed Works from Operations Dashboard */}
+            <div className="space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-800">
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="w-5 h-5 text-emerald-400" />
+                    <h2 className="text-lg font-bold text-slate-100">Latest Completed Works</h2>
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-mono">
+                      {tickets.filter((t) => t.status === 'RESOLVED').length} COMPLETED
                     </span>
                   </div>
+                  <p className="text-xs text-slate-400 mt-0.5">
+                    Facility maintenance jobs and operational tickets resolved from the dashboard
+                  </p>
+                </div>
 
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="text-slate-400 text-[11px]">
-                      {new Date(item.timestamp).toLocaleString()}
-                    </span>
-                    <span className="text-rose-400 font-semibold">{item.issueCount} Defect(s)</span>
-                  </div>
-
+                <div className="flex items-center space-x-2">
                   <button
-                    onClick={() => {
-                      setBuilding(item.building);
-                      setRoomId(item.room);
-                      setCurrentImage(item.image);
-                      setCameraActive(false);
-                      setActiveInspection({
-                        id: item.id,
-                        building: item.building,
-                        room: item.room,
-                        overallCondition: item.condition,
-                        issues: item.issues || []
-                      });
-                      setActiveTab('hub');
-                      showToast(`Loaded inspection for ${item.building} Room ${item.room}`, 'cyan');
-                    }}
-                    className="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 font-semibold transition-colors"
+                    onClick={() => setActiveTab('tickets')}
+                    className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold transition-colors"
                   >
-                    Reload Visual Inspection
+                    <FileText className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>Go to Ticket Desk</span>
                   </button>
                 </div>
-              ))}
+              </div>
+
+              {tickets.filter((t) => t.status === 'RESOLVED').length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {tickets
+                    .filter((t) => t.status === 'RESOLVED')
+                    .map((ticket) => (
+                      <div
+                        key={ticket.id}
+                        className="p-5 rounded-2xl bg-slate-900/60 border border-emerald-500/30 hover:border-emerald-500/50 backdrop-blur-md space-y-4 transition-all relative overflow-hidden group shadow-lg"
+                      >
+                        <div className="absolute top-0 right-0 w-28 h-28 bg-emerald-500/5 rounded-full blur-2xl pointer-events-none group-hover:bg-emerald-500/10 transition-all" />
+
+                        <div className="flex items-start justify-between gap-2">
+                          <div>
+                            <div className="flex items-center space-x-2">
+                              <span className="font-mono font-bold text-xs text-cyan-400">{ticket.id}</span>
+                              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center space-x-1">
+                                <Check className="w-2.5 h-2.5" />
+                                <span>COMPLETED</span>
+                              </span>
+                            </div>
+                            <h3 className="font-bold text-sm text-slate-100 mt-1">{ticket.title}</h3>
+                          </div>
+
+                          <span className={`px-2 py-0.5 rounded text-[9px] font-bold border ${getSeverityBadgeClass(ticket.priority)}`}>
+                            {ticket.priority}
+                          </span>
+                        </div>
+
+                        <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">{ticket.description}</p>
+
+                        <div className="space-y-2 pt-2 border-t border-slate-800/80 text-xs">
+                          <div className="flex items-center justify-between text-slate-400">
+                            <span className="flex items-center space-x-1">
+                              <MapPin className="w-3.5 h-3.5 text-slate-500" />
+                              <span>{ticket.building} · Room {ticket.room}</span>
+                            </span>
+                            <span className="font-mono text-[11px] text-slate-500">
+                              {getCategoryIcon(ticket.category)} {ticket.category}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center justify-between text-[11px] text-slate-500 font-mono">
+                            <span className="flex items-center space-x-1">
+                              <Clock className="w-3 h-3 text-emerald-400" />
+                              <span>Resolved {ticket.resolvedAt ? new Date(ticket.resolvedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : new Date(ticket.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                            </span>
+
+                            <button
+                              onClick={() => handleStatusChange(ticket.id, 'IN_PROGRESS')}
+                              className="text-xs text-slate-400 hover:text-amber-300 underline font-sans"
+                              title="Reopen as In Progress"
+                            >
+                              Reopen
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              ) : (
+                <div className="p-8 text-center rounded-2xl bg-slate-900/40 border border-slate-800 text-slate-400 space-y-2">
+                  <p className="text-sm font-semibold">No works completed yet</p>
+                  <p className="text-xs text-slate-500">
+                    Open the Ticket Desk and click "Resolve" on any maintenance task to record completed works here.
+                  </p>
+                </div>
+              )}
             </div>
+
+            {/* Section 2: Visual Inspection Logs */}
+            <div className="space-y-4 pt-4 border-t border-slate-800">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h2 className="text-lg font-bold text-slate-200">Local Inspection Logs</h2>
+                  <p className="text-xs text-slate-400">Cached past visual scans & photo captures</p>
+                </div>
+
+                <button
+                  onClick={() => {
+                    setHistory([]);
+                    localStorage.removeItem('visionx_history');
+                    showToast('Local scan history cleared.', 'cyan');
+                  }}
+                  className="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-300 text-xs transition-colors"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Clear Logs</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {history.map((item) => (
+                  <div key={item.id} className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-3 hover:border-slate-700 transition-all">
+                    <div className="relative h-44 rounded-xl overflow-hidden bg-black">
+                      <img src={item.image} alt="Log Thumbnail" className="w-full h-full object-cover" />
+                      <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-slate-950/80 backdrop-blur-md border border-slate-800 text-[10px] font-mono text-cyan-400">
+                        {item.building} - {item.room}
+                      </span>
+                    </div>
+
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-slate-400 text-[11px]">
+                        {new Date(item.timestamp).toLocaleString()}
+                      </span>
+                      <span className="text-rose-400 font-semibold">{item.issueCount} Defect(s)</span>
+                    </div>
+
+                    <button
+                      onClick={() => {
+                        setBuilding(item.building);
+                        setRoomId(item.room);
+                        setCurrentImage(item.image);
+                        setCameraActive(false);
+                        setActiveInspection({
+                          id: item.id,
+                          building: item.building,
+                          room: item.room,
+                          overallCondition: item.condition,
+                          issues: item.issues || []
+                        });
+                        setActiveTab('hub');
+                        showToast(`Loaded inspection for ${item.building} Room ${item.room}`, 'cyan');
+                      }}
+                      className="w-full py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 font-semibold transition-colors"
+                    >
+                      Reload Visual Inspection
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
           </div>
         )}
 
