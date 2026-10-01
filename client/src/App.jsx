@@ -629,11 +629,13 @@ export default function App() {
           
           {/* Logo */}
           <div className="flex items-center space-x-3">
-            <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-400 via-indigo-500 to-purple-600 p-[1px] shadow-[0_0_20px_rgba(6,182,212,0.4)]">
-              <div className="w-full h-full bg-[#090d16] rounded-[11px] flex items-center justify-center">
-                <Eye className="w-5 h-5 text-blue-400" />
-              </div>
-            </div>
+            <a href="/" className="block transition-opacity hover:opacity-80">
+              <img 
+                src="/logo.jpg" 
+                alt="VisionX Logo" 
+                className="h-10 w-auto object-contain rounded-lg" 
+              />
+            </a>
             <div>
               <div className="flex items-center space-x-2">
                 <span className="text-xl font-black tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-blue-400">
