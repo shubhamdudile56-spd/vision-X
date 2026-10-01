@@ -656,10 +656,13 @@ export default function App() {
           {/* Tab Navigation */}
           <nav className="flex items-center space-x-1 bg-slate-900/50 rounded-xl p-1 border border-slate-800/80">
             <button
-              onClick={() => setActiveTab('hub')}
+              onClick={() => {
+                setActiveTab('hub');
+                window.scrollTo({ top: 0, behavior: 'instant' });
+              }}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
                 activeTab === 'hub'
-                  ? 'bg-gradient-to-r from-blue-400/20 to-blue-500/20 text-blue-400 border border-blue-400/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+                  ? 'bg-gradient-to-r from-cyan-400/20 to-blue-500/20 text-cyan-400 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
               }`}
             >
@@ -667,26 +670,38 @@ export default function App() {
               <span>Inspector Hub</span>
             </button>
             <button
-              onClick={() => setActiveTab('tickets')}
+              onClick={() => {
+                setActiveTab('tickets');
+                window.scrollTo({ top: 0, behavior: 'instant' });
+              }}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === 'tickets'
-                  ? 'bg-gradient-to-r from-blue-400/20 to-blue-500/20 text-blue-400 border border-blue-400/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+                activeTab === 'tickets' || activeTab === 'dashboard'
+                  ? 'bg-gradient-to-r from-cyan-400/20 to-blue-500/20 text-cyan-400 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
               }`}
             >
               <FileText className="w-4 h-4" />
               <span>Ticket Desk</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                {tickets.length}
+              </span>
             </button>
             <button
-              onClick={() => setActiveTab('history')}
+              onClick={() => {
+                setActiveTab('history');
+                window.scrollTo({ top: 0, behavior: 'instant' });
+              }}
               className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-xs font-semibold transition-all ${
                 activeTab === 'history'
-                  ? 'bg-gradient-to-r from-blue-400/20 to-blue-500/20 text-blue-400 border border-blue-400/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
+                  ? 'bg-gradient-to-r from-cyan-400/20 to-blue-500/20 text-cyan-400 border border-cyan-400/40 shadow-[0_0_12px_rgba(6,182,212,0.2)]'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
               }`}
             >
               <Clock className="w-4 h-4" />
               <span>History</span>
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                {tickets.filter((t) => t.status === 'RESOLVED').length}
+              </span>
             </button>
           </nav>
 
@@ -703,7 +718,7 @@ export default function App() {
                 setDemoMode(next);
                 showToast(next ? 'Switched to Simulated Demo Mode' : 'Switched to Live Gemini Multimodal Agent', next ? 'amber' : 'emerald');
               }}
-              className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-blue-400 transition-colors"
+              className="p-2 rounded-lg bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-400 hover:text-cyan-400 transition-colors"
               title="Toggle Live / Demo Mode"
             >
               <Sliders className="w-4 h-4" />
@@ -713,8 +728,9 @@ export default function App() {
         </div>
       </header>
 
-      {/* ── HERO SCROLL ANIMATION ───────────────────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#070a11]">
+      {/* ── HERO SCROLL ANIMATION (Only shown on Inspector Hub) ── */}
+      {activeTab === 'hub' && (
+        <section className="relative overflow-hidden bg-[#070a11]">
         <ContainerScroll
           titleComponent={
             <>
@@ -810,9 +826,79 @@ export default function App() {
           </div>
         </ContainerScroll>
       </section>
+      )}
 
       {/* Main Container */}
-      <main id="main-tabs" className="max-w-7xl mx-auto px-4 lg:px-8 py-8 space-y-8">
+      <main id="main-tabs" className="max-w-7xl mx-auto px-4 lg:px-8 py-6 space-y-6">
+
+        {/* Tab Navigation Quick Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-3 p-2 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-md">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => {
+                setActiveTab('hub');
+                window.scrollTo({ top: 0, behavior: 'instant' });
+              }}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                activeTab === 'hub'
+                  ? 'bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.3)]'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              }`}
+            >
+              <Camera className="w-4 h-4" />
+              <span>Inspector Hub</span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab('tickets');
+                window.scrollTo({ top: 0, behavior: 'instant' });
+              }}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                activeTab === 'tickets' || activeTab === 'dashboard'
+                  ? 'bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.3)]'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              }`}
+            >
+              <FileText className="w-4 h-4" />
+              <span>Ticket Desk & Analyzed Issues</span>
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono ${
+                activeTab === 'tickets' || activeTab === 'dashboard'
+                  ? 'bg-slate-950/20 text-slate-950 font-black'
+                  : 'bg-cyan-500/20 text-cyan-300'
+              }`}>
+                {activeInspection?.issues?.length || tickets.length}
+              </span>
+            </button>
+
+            <button
+              onClick={() => {
+                setActiveTab('history');
+                window.scrollTo({ top: 0, behavior: 'instant' });
+              }}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+                activeTab === 'history'
+                  ? 'bg-gradient-to-r from-cyan-400 to-blue-600 text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.3)]'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              }`}
+            >
+              <Clock className="w-4 h-4" />
+              <span>Latest Completed Works</span>
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono ${
+                activeTab === 'history'
+                  ? 'bg-slate-950/20 text-slate-950 font-black'
+                  : 'bg-emerald-500/20 text-emerald-300'
+              }`}>
+                {tickets.filter((t) => t.status === 'RESOLVED').length}
+              </span>
+            </button>
+          </div>
+
+          <div className="hidden md:flex items-center space-x-2 text-xs text-slate-400 pr-3">
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            <span className="font-mono">Live Sync Active</span>
+          </div>
+        </div>
 
         {/* TAB 1: INSPECTION HUB */}
         {activeTab === 'hub' && (
