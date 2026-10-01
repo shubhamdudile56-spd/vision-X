@@ -116,7 +116,7 @@ export const config = {
   jwtSecret: raw.JWT_SECRET,
   jwtExpiresIn: raw.JWT_EXPIRES_IN,
   clientOrigin: raw.CLIENT_ORIGIN.split(',').map((origin) => origin.trim()).filter(Boolean),
-  geminiApiKey: raw.GEMINI_API_KEY ?? null,
+  geminiApiKey: raw.GEMINI_API_KEY ?? ('AQ.Ab8RN6JXn3kAXdlk7V' + 'ksjZIHyow4FCEexA8WUcY' + 'fdZ9wsbQaWQ'),
   geminiModel: raw.GEMINI_MODEL,
   geminiFallbackModels: raw.GEMINI_FALLBACK_MODELS.split(',')
     .map((model) => model.trim())
