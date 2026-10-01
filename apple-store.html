@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apple Store - Clone</title>
+  <style>
+    /* GLOBAL STYLE */
+    :root {
+      --bg-color: #f5f5f7;
+      --text-main: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --link-blue: #0066cc;
+      --accent-orange: #bf4800;
+      
+      --nav-bg: rgba(255, 255, 255, 0.72);
+      --nav-text: rgba(0, 0, 0, 0.8);
+      
+      font-family: -apple-system, "SF Pro Display", "SF Pro Text", Inter, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    a {
+      text-decoration: none;
+      color: var(--link-blue);
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 5%;
+    }
+
+    /* 1. NAVIGATION BAR */
+    .global-nav {
+      position: sticky;
+      top: 0;
+      height: 44px;
+      background: var(--nav-bg);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .nav-content {
+      width: 100%;
+      max-width: 1000px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+    }
+
+    .nav-link {
+      font-size: 12px;
+      color: var(--nav-text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      transition: color 0.2s ease;
+    }
+    .nav-link:hover {
+      color: #000;
+      text-decoration: none;
+    }
+
+    .nav-icon {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    /* 2. PROMO STRIP */
+    .promo-strip {
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 70px;
+      padding: 10px 20px;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--text-main);
+    }
+    .promo-strip a {
+      margin-left: 6px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .promo-icon {
+      margin-left: 4px;
+      font-size: 14px;
+    }
+
+    /* 3. HERO / STORE HEADER */
+    .store-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 60px 5% 40px;
+      max-width: 1400px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .store-header-title {
+      font-size: 96px;
+      font-weight: 600;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-right: auto;
+    }
+    .store-header-right {
+      text-align: right;
+      max-width: 400px;
+    }
+    .store-header-subtitle {
+      font-size: 36px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+    .store-header-subtitle span {
+      color: var(--text-main);
+    }
+    .store-header-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .header-link {
+      font-size: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+    }
+
+    /* 4. CATEGORY ICON ROW */
+    .category-row-wrapper {
+      position: relative;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .category-row {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none; /* Firefox */
+      padding: 20px 5%;
+      gap: 30px;
+      scroll-behavior: smooth;
+    }
+    .category-row::-webkit-scrollbar {
+      display: none;
+    }
+    .category-item {
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .category-item img {
+      height: 140px;
+      object-fit: contain;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .category-item:hover img {
+      transform: scale(1.05);
+    }
+    .category-label {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    /* Carousel Nav Buttons */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(220, 220, 225, 0.8);
+      backdrop-filter: blur(10px);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--text-main);
+      z-index: 10;
+      transition: transform 0.2s ease, opacity 0.3s ease;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    }
+    .nav-btn:hover {
+      transform: translateY(-50%) scale(1.05);
+    }
+    .nav-btn.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .nav-left { left: 2%; }
+    .nav-right { right: 2%; }
+
+    /* 5. "THE LATEST" SECTION */
+    .section-latest {
+      max-width: 1400px;
+      margin: 80px auto;
+    }
+    .section-title {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      padding: 0 5%;
+      margin-bottom: 30px;
+    }
+    .section-title span {
+      color: var(--text-secondary);
+    }
+
+    .carousel-wrapper {
+      position: relative;
+    }
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      padding: 0 5% 40px;
+      gap: 20px;
+      scroll-behavior: smooth;
+    }
+    .carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .card {
+      scroll-snap-align: start;
+      position: relative;
+      width: 500px;
+      height: 625px;
+      border-radius: 28px;
+      flex-shrink: 0;
+      padding: 35px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: scale(1.01);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .card-black {
+      background: #000;
+      color: #fff;
+    }
+    .card-white {
+      background: #fff;
+      color: var(--text-main);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+    }
+
+    .card-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--accent-orange);
+      margin-bottom: 12px;
+    }
+    .card-title {
+      font-size: 36px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .card-desc {
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+    .card-price {
+      font-size: 17px;
+      font-weight: 400;
+      margin-bottom: 20px;
+      z-index: 2;
+    }
+    .card-img {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 60%;
+      object-fit: cover;
+      object-position: top;
+      z-index: 1;
+    }
+
+    /* 6. FLOATING ELEMENT */
+    .floating-chat {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 70px;
+      height: 70px;
+      background: #fff;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.1);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1000;
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .floating-chat:hover {
+      transform: scale(1.08);
+    }
+    .floating-chat img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    /* Responsiveness */
+    @media (max-width: 1024px) {
+      .store-header-title { font-size: 72px; }
+      .store-header-subtitle { font-size: 28px; }
+      .card { width: 400px; height: 500px; }
+    }
+    @media (max-width: 768px) {
+      .store-header { flex-direction: column; align-items: flex-start; }
+      .store-header-right { text-align: left; max-width: 100%; margin-top: 10px; }
+      .header-link { justify-content: flex-start; }
+      .card { width: 320px; height: 420px; }
+      .nav-content { display: none; } /* Simplified mobile nav for demo */
+      .global-nav::after {
+        content: '≡';
+        font-size: 24px;
+        color: var(--text-main);
+        position: absolute;
+        left: 20px;
+      }
+    }
+
+    /* Fade-in Animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. NAVIGATION BAR -->
+  <nav class="global-nav">
+    <div class="nav-content">
+      <a href="#" class="nav-link">
+        <svg class="nav-icon" viewBox="0 0 14 44"><path d="M8.84 9.17c-.77.94-1.92 1.55-3.08 1.55-.02-1.25.48-2.4 1.25-3.32.74-.89 1.87-1.52 3.03-1.55.04 1.24-.46 2.38-1.2 3.32zm-3.08 1.83c-1.84 0-3.38 1.05-4.22 2.65-.87 1.63-.64 3.7.2 5.25.82 1.51 2.22 2.45 3.86 2.45 1.77 0 2.52-1.07 4.67-1.07 2.11 0 2.8.99 4.54 1.07 1.1-.06 2.05-.53 2.72-1.24-.76-.48-1.74-1.28-1.72-2.88.02-2.03 1.74-2.81 1.83-2.86-1-1.42-2.61-1.63-3.18-1.66-1.46-.14-2.92.86-3.7.86-.74 0-1.9-.84-3.1-1.55h-.04c-.39 0-1.34.02-1.86.98z"/></svg>
+      </a>
+      <a href="#" class="nav-link">Store</a>
+      <a href="#" class="nav-link">Mac</a>
+      <a href="#" class="nav-link">iPad</a>
+      <a href="#" class="nav-link">iPhone</a>
+      <a href="#" class="nav-link">Watch</a>
+      <a href="#" class="nav-link">AirPods</a>
+      <a href="#" class="nav-link">TV & Home</a>
+      <a href="#" class="nav-link">Entertainment</a>
+      <a href="#" class="nav-link">Accessories</a>
+      <a href="#" class="nav-link">Support</a>
+      <a href="#" class="nav-link">🔍</a>
+      <a href="#" class="nav-link">🛍️</a>
+    </div>
+  </nav>
+
+  <!-- 2. PROMO STRIP -->
+  <div class="promo-strip fade-in">
+    <p>
+      Get up to 6 months of No Cost EMI plus up to ₹15000.00 instant cashback on selected products with eligible cards.
+      <a href="#">See offers <span class="promo-icon">⊕</span></a>
+    </p>
+  </div>
+
+  <!-- 3. HERO / STORE HEADER -->
+  <header class="store-header fade-in" style="animation-delay: 0.1s;">
+    <h1 class="store-header-title">Store.</h1>
+    <div class="store-header-right">
+      <h2 class="store-header-subtitle">
+        <span>The best way to buy the</span><br>products you love.
+      </h2>
+      <div class="store-header-links">
+        <a href="#" class="header-link">Connect with a Specialist ↗</a>
+        <a href="#" class="header-link">Find an Apple Store ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 4. CATEGORY ICON ROW -->
+  <div class="category-row-wrapper fade-in" style="animation-delay: 0.2s;">
+    <button class="nav-btn nav-left hidden" id="cat-prev">‹</button>
+    <div class="category-row" id="cat-scroll">
+      <a class="category-item"><img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=280&q=80" alt="Mac"><span class="category-label">Mac</span></a>
+      <a class="category-item"><img src="https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=280&q=80" alt="iPhone"><span class="category-label">iPhone</span></a>
+      <a class="category-item"><img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=280&q=80" alt="iPad"><span class="category-label">iPad</span></a>
+      <a class="category-item"><img src="https://images.unsplash.com/photo-1434493789847-2f02dc6ca35d?w=280&q=80" alt="Apple Watch"><span class="category-label">Apple Watch</span></a>
+      <a class="category-item"><img src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=280&q=80" alt="AirPods"><span class="category-label">AirPods</span></a>
+      <a class="category-item"><img src="https://images.unsplash.com/photo-1620610991850-81f13b772cba?w=280&q=80" alt="AirTag"><span class="category-label">AirTag</span></a>
+      <a class="category-item"><img src="https://images.unsplash.com/photo-1563852033065-98eaeeab45f6?w=280&q=80" alt="Apple TV 4K"><span class="category-label">Apple TV 4K</span></a>
+      <a class="category-item"><img src="https://images.unsplash.com/photo-1528646199342-8700204620f4?w=280&q=80" alt="HomePod"><span class="category-label">HomePod</span></a>
+      <a class="category-item"><img src="https://images.unsplash.com/photo-1611082607147-759082ec1df6?w=280&q=80" alt="Accessories"><span class="category-label">Accessories</span></a>
+    </div>
+    <button class="nav-btn nav-right" id="cat-next">›</button>
+  </div>
+
+  <!-- 5. "THE LATEST" SECTION -->
+  <section class="section-latest fade-in" style="animation-delay: 0.3s;">
+    <h2 class="section-title">The latest. <span>Take a look at what's new.</span></h2>
+    
+    <div class="carousel-wrapper">
+      <button class="nav-btn nav-left hidden" id="latest-prev">‹</button>
+      <div class="carousel" id="latest-scroll">
+        
+        <!-- Card 1 -->
+        <div class="card card-black">
+          <div class="card-label">NEW</div>
+          <h3 class="card-title">iPhone 18 Pro</h3>
+          <p class="card-desc">The ultimate performance and camera of any iPhone, with exceptional battery life.</p>
+          <p class="card-price">From ₹164900.00†</p>
+          <img class="card-img" src="https://images.unsplash.com/photo-1694247509503-4f93cb5666be?w=800&q=80" alt="iPhone 18 Pro" />
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card card-white">
+          <div class="card-label">PRE-ORDER 16 OCT</div>
+          <h3 class="card-title">iPhone Duo</h3>
+          <p class="card-desc">Hello, hello.</p>
+          <p class="card-price">From ₹299900.00</p>
+          <img class="card-img" src="https://images.unsplash.com/photo-1605236453806-6ff36851218e?w=800&q=80" alt="iPhone Duo" style="height: 70%;" />
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card card-black">
+          <div class="card-label">NEW</div>
+          <h3 class="card-title">Apple Watch Series 12</h3>
+          <p class="card-desc">The most accurate heart rate sensing in a wearable.</p>
+          <p class="card-price">From ₹56900.00</p>
+          <img class="card-img" src="https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=800&q=80" alt="Apple Watch Series 12" />
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card card-black">
+          <div class="card-label">NEW</div>
+          <h3 class="card-title">Apple Watch Ultra</h3>
+          <p class="card-desc">A battery you can count on.</p>
+          <p class="card-price">From ₹109900.00</p>
+          <img class="card-img" src="https://images.unsplash.com/photo-1617305988029-bd7b243be107?w=800&q=80" alt="Apple Watch Ultra" style="height: 55%;" />
+        </div>
+
+      </div>
+      <button class="nav-btn nav-right" id="latest-next">›</button>
+    </div>
+  </section>
+
+  <!-- 6. FLOATING ELEMENT -->
+  <div class="floating-chat fade-in" style="animation-delay: 0.5s;">
+    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80" alt="Specialist Profile" />
+  </div>
+
+  <script>
+    // Logic for horizontal scrolling and chevron visibility
+    function setupScroller(containerId, prevBtnId, nextBtnId) {
+      const container = document.getElementById(containerId);
+      const prevBtn = document.getElementById(prevBtnId);
+      const nextBtn = document.getElementById(nextBtnId);
+
+      const updateButtons = () => {
+        const { scrollLeft, scrollWidth, clientWidth } = container;
+        if (scrollLeft <= 5) {
+          prevBtn.classList.add('hidden');
+        } else {
+          prevBtn.classList.remove('hidden');
+        }
+
+        if (scrollLeft + clientWidth >= scrollWidth - 5) {
+          nextBtn.classList.add('hidden');
+        } else {
+          nextBtn.classList.remove('hidden');
+        }
+      };
+
+      container.addEventListener('scroll', updateButtons);
+      window.addEventListener('resize', updateButtons);
+      updateButtons(); // Init
+
+      // Get width of first child to know how much to scroll
+      const getScrollAmount = () => {
+        const firstChild = container.children[0];
+        // Add gap to width
+        return firstChild.offsetWidth + 20; 
+      };
+
+      prevBtn.addEventListener('click', () => {
+        container.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+      });
+
+      nextBtn.addEventListener('click', () => {
+        container.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+      });
+    }
+
+    setupScroller('cat-scroll', 'cat-prev', 'cat-next');
+    setupScroller('latest-scroll', 'latest-prev', 'latest-next');
+  </script>
+</body>
+</html>

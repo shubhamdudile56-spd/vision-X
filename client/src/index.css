@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    background-color: #05070d;
+    background-image:
+      radial-gradient(60rem 40rem at 12% -10%, rgba(45, 212, 191, 0.14), transparent 60%),
+      radial-gradient(50rem 36rem at 92% 0%, rgba(59, 130, 246, 0.14), transparent 62%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    background-color: rgba(45, 212, 191, 0.32);
+  }
+
+  :focus-visible {
+    outline: 2px solid #2dd4bf;
+    outline-offset: 2px;
+  }
+
+  /* Respect reduced-motion for every decorative animation in the app. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  .glass {
+    @apply border border-white/10 bg-white/[0.04] backdrop-blur-xl;
+  }
+
+  .glass-strong {
+    @apply border border-white/10 bg-ink-900/80 backdrop-blur-2xl;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold
+           transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-vision-500 text-ink-950 hover:bg-vision-400
+           shadow-[0_8px_30px_-8px_rgba(20,184,166,0.7)];
+  }
+
+  .btn-ghost {
+    @apply btn border border-white/10 bg-white/5 text-slate-200 hover:border-vision-400/60 hover:bg-white/10;
+  }
+
+  .btn-danger {
+    @apply btn border border-red-500/40 bg-red-500/10 text-red-300 hover:bg-red-500/20;
+  }
+
+  .field {
+    @apply w-full rounded-lg border border-white/10 bg-ink-900/70 px-3 py-2 text-sm text-slate-100
+           placeholder-slate-500 transition focus:border-vision-400 focus:outline-none focus:ring-1
+           focus:ring-vision-400/60;
+  }
+
+  .label {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slate-400;
+  }
+
+  .card {
+    @apply glass rounded-2xl p-5;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-1
+           text-[11px] font-semibold uppercase tracking-wide text-slate-300;
+  }
+
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+}
+
+/* Range inputs used by the speech-rate and frame-throttle sliders. */
+input[type='range'] {
+  @apply h-1.5 w-full cursor-pointer appearance-none rounded-full bg-white/10;
+}
+
+input[type='range']::-webkit-slider-thumb {
+  @apply h-4 w-4 appearance-none rounded-full bg-vision-400 shadow-[0_0_0_4px_rgba(45,212,191,0.2)];
+}
+
+input[type='range']::-moz-range-thumb {
+  @apply h-4 w-4 rounded-full border-0 bg-vision-400 shadow-[0_0_0_4px_rgba(45,212,191,0.2)];
+}
